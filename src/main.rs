@@ -2,6 +2,7 @@ mod message;
 mod update;
 mod view;
 mod board;
+mod pieces;
 
 use board::Board;
 use iced::{ Size, window };

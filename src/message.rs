@@ -1,2 +1,3 @@
 #[derive(Debug, Clone, Copy)]
-pub enum Message {}
+pub enum Message {
+}
