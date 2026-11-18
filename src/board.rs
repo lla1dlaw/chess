@@ -1,4 +1,3 @@
-use crate::message::Message;
 use crate::pieces::{ Piece, PieceHandles, PieceKind, PieceColor };
 use iced::widget::{ center, button, responsive, text, Grid, svg };
 use iced::{ Color, Element, Length };
@@ -50,37 +49,47 @@ impl Board {
         }
     }
 
-    pub fn on_square_clicked(&mut self, row: usize, col: usize) {
-        let piece_clicked = self.squares[row][col];
-
-        match self.selected {
-            Some(from) => {
-                match piece_clicked {
-                    Some(piece) {
-                        if from == (row, col) { self.selected = None; }
-                        else if piece.color == self.turn {
-                            self.selected = Some((row, col))
-                        }
-                    }
-                    _ => {}
-                }
+    fn on_square_clicked(&mut self, row: usize, col: usize) {
+        match (self.selected, self.squares[row][col]) {
+            // no square currently selected, and there is a piece clicked
+            (None, Some(piece)) if piece.color == self.turn => {
+                self.selected = Some((row, col));
             }
-            _ => {
-                match piece_clicked {
-                    Some(piece) => {
-                        if piece.color == self.turn { self.selected = Some((row, col)); }
-                    },
-                    _ => {}
 
-                }
+            // currently selected square is the square clicked
+            (Some(from), _) if from == (row, col) => {
+                self.selected = None;
             }
+
+            (Some(_), Some(piece)) if piece.color == self.turn => {
+                self.selected = Some((row, col));
+            }
+
+            (Some(from), _) => {
+                // call self.move_piece
+                self.move_piece(from, (row, col))
+            }
+
+            (None, _) => {}
         }
+
     }
 
     fn move_piece(&mut self, from: (usize, usize), to: (usize, usize)) {
         // check if move is legal
         // apply move if it is
-        todo!()
+
+        let piece = self.squares[from.0][from.1].take();
+        self.squares[to.0][to.1] = piece;
+        self.selected = None;
+        match self.turn {
+            PieceColor::White => {
+                self.turn = PieceColor::Black;
+            } 
+            PieceColor::Black => {
+                self.turn = PieceColor::White;
+            }
+        }
     }
 
     pub fn view(&self) -> Element<'_, BoardMessage> {

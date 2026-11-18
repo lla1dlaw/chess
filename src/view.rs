@@ -1,7 +1,6 @@
 use crate::App;
 use crate::message::Message;
 
-use iced::widget::{ center };
 use iced::{ Element };
 
 
