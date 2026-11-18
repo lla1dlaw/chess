@@ -1,3 +1,7 @@
+use crate::board::BoardMessage;
+
 #[derive(Debug, Clone, Copy)]
-pub enum Message {
+pub enum Message { 
+    Board(BoardMessage),
+    ResetGame,
 }

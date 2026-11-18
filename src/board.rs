@@ -3,10 +3,16 @@ use crate::pieces::{ Piece, PieceHandles, PieceKind, PieceColor };
 use iced::widget::{ center, button, responsive, text, Grid, svg };
 use iced::{ Color, Element, Length };
 
+#[derive(Debug, Clone, Copy)]
+pub enum BoardMessage {
+    SquareClicked(usize, usize),
+}
 
 pub struct Board {
-    squares: [[Option<Piece>; 8]; 8],
+    pub turn: PieceColor,
+    pub selected: Option<(usize, usize)>,
     handles: PieceHandles,
+    squares: [[Option<Piece>; 8]; 8],
 }
 
 impl Default for Board {
@@ -26,7 +32,9 @@ impl Default for Board {
         }
 
         Self {
-            squares, 
+            turn: White,
+            selected: None,
+            squares: squares, 
             handles: PieceHandles::default(),
         }
     }
@@ -34,10 +42,51 @@ impl Default for Board {
 
 
 impl Board {
-    pub fn view(&self) -> Element<'_, Message> {
+    pub fn update(&mut self, message: BoardMessage) {
+        match message {
+            BoardMessage::SquareClicked(row, col) => {
+                self.on_square_clicked(row, col);
+            }
+        }
+    }
+
+    pub fn on_square_clicked(&mut self, row: usize, col: usize) {
+        let piece_clicked = self.squares[row][col];
+
+        match self.selected {
+            Some(from) => {
+                match piece_clicked {
+                    Some(piece) {
+                        if from == (row, col) { self.selected = None; }
+                        else if piece.color == self.turn {
+                            self.selected = Some((row, col))
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            _ => {
+                match piece_clicked {
+                    Some(piece) => {
+                        if piece.color == self.turn { self.selected = Some((row, col)); }
+                    },
+                    _ => {}
+
+                }
+            }
+        }
+    }
+
+    fn move_piece(&mut self, from: (usize, usize), to: (usize, usize)) {
+        // check if move is legal
+        // apply move if it is
+        todo!()
+    }
+
+    pub fn view(&self) -> Element<'_, BoardMessage> {
         responsive(|available| {
             let board_size = (available.width.min(available.height) / 8.0).floor() * 8.0;
-            let square_padding = (board_size / 8.0) * 0.12; // scale padding proportional to board size
+            let square_padding = (board_size / 8.0) * 0.06; // scale padding proportional to board size
     
             // create board instance
             let mut board_grid = 
@@ -49,7 +98,7 @@ impl Board {
             for row in 0..8 {
                 for col in 0..8 {
                     let is_light = (row + col) % 2 == 0;
-                    let content: Element<'_, Message> = match self.squares[row][col] {
+                    let content: Element<'_, BoardMessage> = match self.squares[row][col] {
                         Some(piece) => svg(self.handles.get(piece).clone())   
                             .width(Length::Fill)
                             .height(Length::Fill)
@@ -61,6 +110,7 @@ impl Board {
                         .width(Length::Fill)
                         .height(Length::Fill)
                         .padding(square_padding)
+                        .on_press(BoardMessage::SquareClicked(row, col))
                         .style(move |_theme, _status| {
                             let bg_color = if is_light {
                                 Color::from_rgb8(240, 217, 181)
@@ -85,4 +135,5 @@ impl Board {
         })
         .into()
     }
+
 }

@@ -42,19 +42,19 @@ pub struct PieceHandles {
 impl Default for PieceHandles {
     fn default() -> Self {
         Self {
-            w_pawn: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wp.svg")),
-            w_knight: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wk.svg")),
+            w_pawn:   svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wp.svg")),
+            w_knight: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wn.svg")),
             w_bishop: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wb.svg")),
-            w_rook: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wr.svg")),
-            w_queen: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wq.svg")),
-            w_king: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wk.svg")),
+            w_rook:   svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wr.svg")),
+            w_queen:  svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wq.svg")),
+            w_king:   svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/wk.svg")),
 
-            b_pawn: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bp.svg")),
-            b_knight: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bk.svg")),
+            b_pawn:   svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bp.svg")),
+            b_knight: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bn.svg")),
             b_bishop: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bb.svg")),
-            b_rook: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/br.svg")),
-            b_queen: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bq.svg")),
-            b_king: svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bk.svg")),
+            b_rook:   svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/br.svg")),
+            b_queen:  svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bq.svg")),
+            b_king:   svg::Handle::from_memory(include_bytes!("../assets/pieces/cburnett/bk.svg")),
         }
     }
 }

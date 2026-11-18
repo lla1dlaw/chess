@@ -7,6 +7,7 @@ use iced::{ Element };
 
 impl App {
     pub fn view(&self) -> Element<'_, Message> {
-        center(self.board.view()).into()
+        // '.map(Message::Board)' converts 'Element<BoardMessage>' -> 'Element<Message>'
+        self.board.view().map(Message::Board) 
     }
 }
