@@ -8,3 +8,4 @@ iced = {
     version = "0.14.0",
     features = ["svg", "image"]
 }
+shakmaty = "0.30.3"

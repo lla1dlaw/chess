@@ -1,4 +1,6 @@
-use iced::{ Font, Color, Element, Length };
+use shakmaty::{ Chess, Color, Move, Position, Square };
+
+use iced::{ Color as IcedColor, Font, Element, Length };
 use iced::widget::{ center, button, responsive, text, svg, Text };
 use iced::widget::{ container, Grid, stack };
 use iced::font::{ Weight };
@@ -15,12 +17,13 @@ pub enum BoardMessage {
 }
 
 pub struct Board {
-    pub turn: PieceColor,
-    pub selected: Option<(usize, usize)>,
+    pub position: Chess,
+    pub selected: Option<Square>,
+    pub move_history: Vec<Move>, // could also be Vec<UciMove> for engines
+    pub handles: PieceHandles,
+    // the following two members are used for drawing square labels
     files: [char; 8],
     ranks: [u8; 8],
-    handles: PieceHandles,
-    squares: [[Option<Piece>; 8]; 8],
 }
 
 impl Default for Board {
@@ -38,16 +41,14 @@ impl Default for Board {
             squares[6][col] = Some(Piece { color: White, kind: Pawn });
             squares[7][col] = Some(Piece { color: White, kind: back_rank[col] });
         }
-        let files  = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-        let ranks = [ 1,   2,   3,   4,   5,   6,   7,   8 ];
         
         Self {
             turn: White,
             selected: None,
             squares: squares, 
             handles: PieceHandles::default(),
-            files: files,
-            ranks: ranks,
+            files: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
+            ranks: [ 1,   2,   3,   4,   5,   6,   7,   8 ],
         }
     }
 }
@@ -108,8 +109,8 @@ impl Board {
             let square_size   = board_size / 8.0;
             let piece_padding = square_size * 0.06; // scale padding proportional to board size/square size
             let label_size    = (square_size * 0.18).max(10.0);
-            let light_color   = Color::from_rgb8(240, 217, 181);
-            let dark_color    = Color::from_rgb8(181, 136, 99);
+            let light_color   = IcedColor::from_rgb8(240, 217, 181);
+            let dark_color    = IcedColor::from_rgb8(181, 136, 99);
 
              
             // create board instance
